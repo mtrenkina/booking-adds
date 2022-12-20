@@ -1,2 +1,2 @@
-# keksobuking
-javascript pet project
+# Keksobuking
+Пэт-проект «Кексобукинг»
