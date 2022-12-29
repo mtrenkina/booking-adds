@@ -1,4 +1,9 @@
-const ROOM_TYPES = ['palace', 'flat', 'house', 'bungalow'];
+const ROOM_TYPES = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+};
 const TIME_VARIABLES = ['12:00', '13:00', '14:00'];
 const ROOM_EQUIPMENT = [
   'wifi',
@@ -13,14 +18,6 @@ const PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
-
-export function getRoomType() {
-  return ROOM_TYPES[getRandomInteger(0, ROOM_TYPES.length - 1)];
-}
-
-export function getTimeVariable() {
-  return TIME_VARIABLES[getRandomInteger(0, TIME_VARIABLES.length - 1)];
-}
 
 function getItemsList(arr) {
   const quantity = getRandomInteger(1, arr.length);
@@ -37,6 +34,15 @@ function getItemsList(arr) {
   });
 
   return list;
+}
+
+export function getRoomType() {
+  const roomTypesKeys = Object.keys(ROOM_TYPES);
+  return roomTypesKeys[getRandomInteger(0, roomTypesKeys.length - 1)];
+}
+
+export function getTimeVariable() {
+  return TIME_VARIABLES[getRandomInteger(0, TIME_VARIABLES.length - 1)];
 }
 
 export function getEquipmentList() {
@@ -57,6 +63,7 @@ export function getRandomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+//Returns element AND list of used numbers
 export function getUniqueElement(usedNumbers, min, max) {
   let currentNumber = getRandomInteger(min, max);
 
@@ -65,4 +72,8 @@ export function getUniqueElement(usedNumbers, min, max) {
   }
   usedNumbers.push(currentNumber);
   return [usedNumbers, currentNumber];
+}
+
+export function getOfferType(roomKey) {
+  return Object.keys(ROOM_TYPES).find((key) => ROOM_TYPES[key] === roomKey);
 }
