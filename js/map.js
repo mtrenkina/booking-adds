@@ -19,7 +19,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 const onMapLoad = () => {
-  fillAddress(START_LATITUDE, START_LONGITUDE);
+  setAddress(START_LATITUDE, START_LONGITUDE);
 };
 
 export function renderCards(advertisements) {
@@ -65,7 +65,7 @@ export function setUpMap(advertisements) {
   renderCards(advertisements);
 }
 
-function fillAddress(lat, long) {
+function setAddress(lat, long) {
   const latitude = lat.toFixed(LOCATION_PRECISION);
   const longitude = long.toFixed(LOCATION_PRECISION);
   addressField.value = `${latitude} ${longitude}`;
