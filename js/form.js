@@ -1,16 +1,7 @@
-const form = document.querySelector('.ad-form');
-const priceInput = form.querySelector('#price');
-const typeSelect = form.querySelector('#type');
-const timeinSelect = form.querySelector('#timein');
-const timeoutSelect = form.querySelector('#timeout');
-const roomNumberSelect = form.querySelector('#room_number');
-const capacitySelect = form.querySelector('#capacity');
-const addressField = form.querySelector('#address');
-const mapFilters = document.querySelector('.map__filters');
-const formReset = form.querySelector('.ad-form__reset');
+import { sendData } from './data.js';
 
-export const START_LATITUDE = 35.6804;
-export const START_LONGITUDE = 139.769;
+export const DEFAULT_LAT = 35.6804;
+export const DEFAULT_LONG = 139.769;
 export const LOCATION_PRECISION = 5;
 
 const minPrices = {
@@ -26,6 +17,17 @@ const unavaliableCapacities = {
   3: [3],
   100: [0, 1, 2],
 };
+
+export const form = document.querySelector('.ad-form');
+export const formReset = form.querySelector('.ad-form__reset');
+const priceInput = form.querySelector('#price');
+const typeSelect = form.querySelector('#type');
+const timeinSelect = form.querySelector('#timein');
+const timeoutSelect = form.querySelector('#timeout');
+const roomNumberSelect = form.querySelector('#room_number');
+const capacitySelect = form.querySelector('#capacity');
+const addressField = form.querySelector('#address');
+const mapFilters = document.querySelector('.map__filters');
 
 export const setAddress = (lat, long) => {
   const latitude = lat.toFixed(LOCATION_PRECISION);
@@ -105,9 +107,20 @@ export const activateForm = () => {
   });
 };
 
-const onResetForm = () => {
-  setAddress(START_LATITUDE, START_LONGITUDE);
+export const onResetForm = () => {
+  setAddress(DEFAULT_LAT, DEFAULT_LONG);
   onRoomNumberChange();
+};
+
+export const onSubmitForm = (onSuccess, onFail) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      () => onSuccess(),
+      () => onFail(),
+      new FormData(evt.target)
+    );
+  });
 };
 
 typeSelect.addEventListener('change', onTypeChange);

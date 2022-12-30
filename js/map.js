@@ -1,10 +1,5 @@
 import { createCard } from './cards.js';
-import {
-  START_LATITUDE,
-  START_LONGITUDE,
-  activateForm,
-  setAddress,
-} from './form.js';
+import { DEFAULT_LAT, DEFAULT_LONG, activateForm, setAddress } from './form.js';
 
 const ZOOM = 9;
 const POINTER_WIDTH = 40;
@@ -26,8 +21,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const mainMarker = L.marker(
   {
-    lat: START_LATITUDE,
-    lng: START_LONGITUDE,
+    lat: DEFAULT_LAT,
+    lng: DEFAULT_LONG,
   },
   {
     draggable: true,
@@ -39,9 +34,13 @@ const addMainMarker = () => {
   mainMarker.addTo(map);
 };
 
+export const mainMarkerDefaultPosition = () => {
+  mainMarker.setLatLng(L.latLng(DEFAULT_LAT, DEFAULT_LONG));
+};
+
 const onMapLoad = () => {
   activateForm();
-  setAddress(START_LATITUDE, START_LONGITUDE);
+  setAddress(DEFAULT_LAT, DEFAULT_LONG);
   addMainMarker();
 };
 
@@ -74,8 +73,8 @@ export const renderCards = (advertisements) => {
 export const setUpMap = (advertisements) => {
   map.on('load', onMapLoad).setView(
     {
-      lat: START_LATITUDE,
-      lng: START_LONGITUDE,
+      lat: DEFAULT_LAT,
+      lng: DEFAULT_LONG,
     },
     ZOOM
   );
