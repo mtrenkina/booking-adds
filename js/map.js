@@ -1,28 +1,50 @@
 import { createCard } from './cards.js';
-import { advertisements } from './data.js';
+import { DEFAULT_LAT, DEFAULT_LONG, activateForm, setAddress } from './form.js';
 
-const START_LATITUDE = 35.6804;
-const START_LONGITUDE = 139.769;
 const ZOOM = 9;
 const POINTER_WIDTH = 40;
-const LOCATION_PRECISION = 5;
-
-const adForm = document.querySelector('.ad-form');
-const addressField = adForm.querySelector('#address');
+const MAIN_POINTER_WIDTH = 52;
 
 const map = L.map('map-canvas');
 const markers = [];
+
+const mainPinIcon = L.icon({
+  iconUrl: '../img/main-pin.svg',
+  iconSize: [MAIN_POINTER_WIDTH, MAIN_POINTER_WIDTH],
+  iconAnchor: [MAIN_POINTER_WIDTH / 2, MAIN_POINTER_WIDTH],
+});
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
-const onMapLoad = () => {
-  setAddress(START_LATITUDE, START_LONGITUDE);
+const mainMarker = L.marker(
+  {
+    lat: DEFAULT_LAT,
+    lng: DEFAULT_LONG,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  }
+);
+
+const addMainMarker = () => {
+  mainMarker.addTo(map);
 };
 
-export function renderCards(advertisements) {
+export const mainMarkerDefaultPosition = () => {
+  mainMarker.setLatLng(L.latLng(DEFAULT_LAT, DEFAULT_LONG));
+};
+
+const onMapLoad = () => {
+  activateForm();
+  setAddress(DEFAULT_LAT, DEFAULT_LONG);
+  addMainMarker();
+};
+
+export const renderCards = (advertisements) => {
   advertisements.forEach(({ author, location, offer }) => {
     const icon = L.icon({
       iconUrl: '../img/pin.svg',
@@ -46,13 +68,13 @@ export function renderCards(advertisements) {
     });
     markers.push(marker);
   });
-}
+};
 
-export function setUpMap(advertisements) {
+export const setUpMap = (advertisements) => {
   map.on('load', onMapLoad).setView(
     {
-      lat: START_LATITUDE,
-      lng: START_LONGITUDE,
+      lat: DEFAULT_LAT,
+      lng: DEFAULT_LONG,
     },
     ZOOM
   );
@@ -63,10 +85,10 @@ export function setUpMap(advertisements) {
   }).addTo(map);
 
   renderCards(advertisements);
-}
+};
 
-function setAddress(lat, long) {
-  const latitude = lat.toFixed(LOCATION_PRECISION);
-  const longitude = long.toFixed(LOCATION_PRECISION);
-  addressField.value = `${latitude} ${longitude}`;
-}
+mainMarker.on('moveend', (evt) => {
+  const lat = evt.target.getLatLng().lat;
+  const lng = evt.target.getLatLng().lng;
+  setAddress(lat, lng);
+});
