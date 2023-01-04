@@ -5,22 +5,32 @@ const cardTemplate = document
   .content.querySelector('.popup');
 
 function setFeaturesList(featuresList, features) {
-  featuresList.innerHTML = '';
-  featuresList.innerHTML = features
-    .map(
-      (feature) => `<li class="popup__feature popup__feature--${feature}"></li>`
-    )
-    .join('');
+  if (features) {
+    featuresList.style.display = 'block';
+    featuresList.innerHTML = '';
+    featuresList.innerHTML = features
+      .map(
+        (feature) => `<li class="popup__feature popup__feature--${feature}"></li>`
+      )
+      .join('');
+  } else {
+    featuresList.style.display = 'none';
+  }
 }
 
 function addPhotos(photosBlock, photos) {
-  photosBlock.innerHTML = '';
-  photosBlock.innerHTML = photos
-    .map(
-      (photo) =>
-        `<img src="${photo}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`
-    )
-    .join('');
+  if (photos) {
+    photosBlock.style.display = 'block';
+    photosBlock.innerHTML = '';
+    photosBlock.innerHTML = photos
+      .map(
+        (photo) =>
+          `<img src="${photo}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`
+      )
+      .join('');
+  } else {
+    photosBlock.style.display = 'none';
+  }
 }
 
 export function createCard(offer, author) {

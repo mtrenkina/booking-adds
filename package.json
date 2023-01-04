@@ -14,12 +14,16 @@
     "browser-sync": "^2.27.11",
     "eslint": "8.30.0",
     "eslint-config-htmlacademy": "8.0.0",
-    "leaflet": "^1.9.3"
+    "leaflet": "^1.9.3",
+    "lodash": "^4.17.21",
+    "webpack": "5.75.0",
+    "webpack-cli": "5.0.1"
   },
   "license": "MIT",
   "scripts": {
+    "build": "webpack --mode production",
     "editorconfig": "editorconfig-cli",
-    "start": "browser-sync start --server --no-ui --files \"js/**/*.js\"",
+    "start": "browser-sync start --server \"build/\" --no-ui --files \"source/**/*.js\"",
     "test": "eslint js/"
   },
   "editorconfig-cli": [
