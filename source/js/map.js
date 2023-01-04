@@ -1,7 +1,8 @@
+import L from 'leaflet';
 import { createCard } from './cards.js';
 import { DEFAULT_LAT, DEFAULT_LONG, activateForm, setAddress } from './form.js';
 
-const ZOOM = 9;
+const ZOOM = 13;
 const POINTER_WIDTH = 40;
 const MAIN_POINTER_WIDTH = 52;
 
@@ -51,8 +52,8 @@ export const renderCards = (advertisements) => {
       iconSize: [POINTER_WIDTH, POINTER_WIDTH],
       iconAnchor: [POINTER_WIDTH / 2, POINTER_WIDTH],
     });
-    const lat = location.x;
-    const lng = location.y;
+    const lat = location.lat;
+    const lng = location.lng;
     const marker = L.marker(
       {
         lat,
@@ -85,6 +86,12 @@ export const setUpMap = (advertisements) => {
   }).addTo(map);
 
   renderCards(advertisements);
+};
+
+export const removeMapMarkers = () => {
+  markers.forEach((marker) => {
+    marker.remove();
+  });
 };
 
 mainMarker.on('moveend', (evt) => {
