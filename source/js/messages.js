@@ -37,7 +37,7 @@ export const showSuccessMessage = () => {
   showMessage(successMessage);
 };
 
-export const ErrorMessage = () => {
+export const showErrorMessage = () => {
   showMessage(errorMessage);
   errorButton.addEventListener('click', onClick(errorMessage));
 };

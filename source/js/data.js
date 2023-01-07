@@ -9,7 +9,7 @@ export const getData = (onSuccess, onFail) => {
       if (response.ok) {
         return response.json();
       }
-      onFail(`При загрузке данных произошла ошибка: ${response.text}`);
+      onFail(`При загрузке объявлений произошла ошибка: ${response.text}`);
     })
     .then(onSuccess)
     .catch(onFail);
@@ -22,9 +22,14 @@ export const sendData = (onSuccess, onFail, body) => {
   })
     .then((response) => {
       if (response.ok) {
-        return onSuccess();
+        onSuccess('Ваше объявление успешно размещено!');
+      } else if (response.status >= 500 && response.status <= 505) {
+        onFail('Не удалось получить данные с сервера. Попробуйте ещё раз!');
+      } else {
+        onFail('Не удалось отправить форму. Попробуйте ещё раз!');
       }
-      onFail();
     })
-    .catch(onFail);
+    .catch(() => {
+      onFail('Не удалось отправить форму. Попробуйте ещё раз!');
+    });
 };

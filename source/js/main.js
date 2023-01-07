@@ -20,7 +20,7 @@ import {
   onResetForm,
 } from './form.js';
 import { setUpMap, renderCards, mainMarkerDefaultPosition } from './map.js';
-import { activateFilter, deactivateFilter } from './filter.js';
+import { activateFilter, deactivateFilter, setFilterChange } from './filter.js';
 import { DEFAULT_AVATAR, DEFAULT_PHOTO, previewAvatar, previewPhoto, clearOutImage } from './photos.js';
 
 const MIN_ADDS_COUNT = 0;
@@ -55,3 +55,4 @@ getData(
   showAlert
 );
 
+setFilterChange();
