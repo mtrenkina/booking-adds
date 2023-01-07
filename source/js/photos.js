@@ -1,6 +1,7 @@
 const IMG_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-const fileChooser = document.querySelector('.ad-form__field input[type=file]');
+const fileChooserAvatar = document.querySelector('.ad-form__field input[type=file]');
+const fileChooserPhoto = document.querySelector('.ad-form__upload input[type=file]');
 const upload = document.querySelector('.ad-form__photo');
 
 export const DEFAULT_AVATAR = '../img/muffin-grey.svg';
@@ -34,4 +35,5 @@ const onFileUpload = (chooser, preview, fileTypes) => (evt) => {
   }
 };
 
-fileChooser.addEventListener('change', onFileUpload(fileChooser, previewAvatar, IMG_TYPES));
+fileChooserAvatar.addEventListener('change', onFileUpload(fileChooserAvatar, previewAvatar, IMG_TYPES));
+fileChooserPhoto.addEventListener('change', onFileUpload(fileChooserPhoto, previewPhoto, IMG_TYPES));

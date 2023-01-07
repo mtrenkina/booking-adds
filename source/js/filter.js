@@ -13,7 +13,14 @@ const priceSelect = filterForm.querySelector('#housing-price');
 const roomsSelect = filterForm.querySelector('#housing-rooms');
 const guestsSelect = filterForm.querySelector('#housing-guests');
 
+export const resetFilters = () => {
+  [...filterElements].forEach((el) => {el.value = DEFAULT_VALUE;});
+  const checkedFeatures = filterForm.querySelectorAll('.map__checkbox:checked');
+  [...checkedFeatures].forEach((feature) => {feature.checked = false;});
+};
+
 export const deactivateFilter = () => {
+  resetFilters();
   filterForm.classList.add('.map__filters--disabled');
   for (let i = 0; i < filterElements.length; i++) {
     filterElements[i].setAttribute('disabled', '');
@@ -60,7 +67,7 @@ const checkFeatures = (advertisement) => {
   return count === checkedFeatures.length;
 };
 
-const getFilteredAds = (advertisements) => {
+export const getFilteredAds = (advertisements) => {
   const filteredAdvertisements = advertisements.filter((advertisement) => (
     checkType(advertisement, typeSelect) &&
       checkPrice(advertisement, priceSelect) &&

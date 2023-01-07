@@ -1,5 +1,7 @@
 import { sendData } from './data.js';
 import { onRoomNumberChange } from './validate.js';
+import { resetFilters } from './filter.js';
+import { showSuccessMessage, showErrorMessage } from './messages.js';
 
 export const DEFAULT_LAT = 35.6804;
 export const DEFAULT_LONG = 139.769;
@@ -51,16 +53,20 @@ export const activateForm = () => {
 export const onResetForm = () => {
   setAddress(DEFAULT_LAT, DEFAULT_LONG);
   onRoomNumberChange();
+  resetFilters();
 };
 
-const onSubmitForm = (onSuccess, onFail) => {
+const onSubmitForm = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
+    const formData = new FormData(evt.target);
     sendData(
-      () => onSuccess(),
-      () => onFail(),
-      new FormData(evt.target)
-    );
+      () => {
+        showSuccessMessage();
+        onResetForm();
+      },
+      showErrorMessage(),
+      formData);
   });
 };
 
