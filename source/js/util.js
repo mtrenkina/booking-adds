@@ -44,11 +44,3 @@ export const showAlert = () => {
   document.addEventListener('keydown', onPopupEscKeydown);
   document.addEventListener('click', closePopup);
 };
-
-export const debounce = (fn, wait) => {
-  let timeout;
-  return function () {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn.apply(this, arguments), wait);
-  };
-};
