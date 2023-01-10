@@ -1,12 +1,3 @@
-import './cards.js';
-import './data.js';
-import './filter.js';
-import './validate.js';
-import './form.js';
-import './map.js';
-import './messages.js';
-import './photos.js';
-
 import { showAlert } from './util.js';
 import { getData } from './data.js';
 import {
@@ -18,6 +9,7 @@ import {
   activateForm,
   setAddress,
   onResetForm,
+  onSubmitForm,
 } from './form.js';
 import { setUpMap, renderCards, mainMarkerDefaultPosition } from './map.js';
 import { activateFilter, deactivateFilter, setFilterChange } from './filter.js';
@@ -27,6 +19,8 @@ const MIN_ADDS_COUNT = 0;
 const ADDS_COUNT = 10;
 
 let newAdvertisements = [];
+
+deactivateForm();
 
 const setDefaults = () => {
   form.reset();
@@ -40,19 +34,15 @@ const setDefaults = () => {
   activateFilter();
 };
 
-deactivateForm();
-
-getData(
-  (advertisements) => {
-    newAdvertisements = advertisements.slice(MIN_ADDS_COUNT, ADDS_COUNT);
-    setUpMap(newAdvertisements);
-    activateForm();
-    formReset.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      setDefaults();
-    });
-  },
-  showAlert
-);
-
-setFilterChange();
+getData((advertisements) => {
+  setFilterChange(advertisements);
+  newAdvertisements = advertisements.slice(MIN_ADDS_COUNT, ADDS_COUNT);
+  setUpMap(newAdvertisements);
+  activateForm();
+  formReset.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    setDefaults();
+  });
+  onSubmitForm();
+  mainMarkerDefaultPosition();
+}, showAlert);

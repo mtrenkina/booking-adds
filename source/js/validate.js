@@ -2,7 +2,7 @@ const MIN_LENGTH = 30;
 const MAX_LENGTH = 100;
 const MAX_PRICE = 100000;
 
-const minPrices = {
+export const minPrices = {
   palace: 10000,
   flat: 1000,
   house: 5000,
@@ -17,13 +17,13 @@ export const unavaliableCapacities = {
 };
 
 const form = document.querySelector('.ad-form');
-const titleInput = form.querySelector('#title');
-const priceInput = form.querySelector('#price');
-const typeSelect = form.querySelector('#type');
-const timeinSelect = form.querySelector('#timein');
-const timeoutSelect = form.querySelector('#timeout');
-const roomNumberSelect = form.querySelector('#room_number');
-const capacitySelect = form.querySelector('#capacity');
+export const titleInput = form.querySelector('#title');
+export const priceInput = form.querySelector('#price');
+export const typeSelect = form.querySelector('#type');
+export const timeinSelect = form.querySelector('#timein');
+export const timeoutSelect = form.querySelector('#timeout');
+export const roomNumberSelect = form.querySelector('#room_number');
+export const capacitySelect = form.querySelector('#capacity');
 
 const onTitleBlur = () => {
   const valueLength = titleInput.value.length;
@@ -58,7 +58,7 @@ const onTypeChange = () => {
   priceInput.placeholder = minPrices[typeSelect.value];
 };
 
-const onTimeinChange = () => {
+export const onTimeinChange = () => {
   timeoutSelect.value = timeinSelect.value;
 };
 

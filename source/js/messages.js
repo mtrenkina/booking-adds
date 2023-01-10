@@ -1,12 +1,12 @@
 import { isEscEvt, isEnterEvt } from './util.js';
 
-const body = document.querySelector ('body');
+const body = document.querySelector('body');
 const successMessage = body.querySelector('#success').content.querySelector('.success').cloneNode(true);
 const errorMessage = body.querySelector('#error').content.querySelector('.error').cloneNode(true);
-const errorButton = body.querySelector('.error__button');
+const errorButton = errorMessage.querySelector('.error__button');
 
 const closeMessage = (message) => {
-  message.classList.add('hidden');
+  message.remove();
 };
 
 const onClick = (message) => (evt) => {
@@ -27,8 +27,8 @@ const onMessageKeydown = (message) => (evt) => {
 };
 
 const showMessage = (message) => {
-  message.classList.remove('hidden');
-  message.style.zIndex = 100;
+  document.body.appendChild(message);
+  message.style.zIndex = 1000;
   document.addEventListener('keydown', onMessageKeydown(message));
   message.addEventListener('click', onClick(message));
 };

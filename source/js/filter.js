@@ -6,6 +6,8 @@ const DEFAULT_VALUE = 'any';
 const LOW_PRICE = 10000;
 const HIGH_PRICE = 50000;
 
+const form = document.querySelector('.ad-form');
+const formReset = form.querySelector('.ad-form__reset');
 const filterForm = document.querySelector('.map__filters');
 const filterElements = filterForm.elements;
 const typeSelect = filterForm.querySelector('#housing-type');
@@ -14,27 +16,34 @@ const roomsSelect = filterForm.querySelector('#housing-rooms');
 const guestsSelect = filterForm.querySelector('#housing-guests');
 
 export const resetFilters = () => {
-  [...filterElements].forEach((el) => {el.value = DEFAULT_VALUE;});
+  [...filterElements].forEach((el) => {
+    el.value = DEFAULT_VALUE;
+  });
   const checkedFeatures = filterForm.querySelectorAll('.map__checkbox:checked');
-  [...checkedFeatures].forEach((feature) => {feature.checked = false;});
+  [...checkedFeatures].forEach((feature) => {
+    feature.checked = false;
+  });
 };
 
 export const deactivateFilter = () => {
   resetFilters();
   filterForm.classList.add('.map__filters--disabled');
-  for (let i = 0; i < filterElements.length; i++) {
-    filterElements[i].setAttribute('disabled', '');
-  }
+
+  [...filterElements].forEach((filter) => {
+    filter.setAttribute('disabled', '');
+  });
 };
 
 export const activateFilter = () => {
   filterForm.classList.remove('.map__filters--disabled');
-  for (let i = 0; i < filterElements.length; i++) {
-    filterElements[i].removeAttribute('disabled');
-  }
+
+  [...filterElements].forEach((filter) => {
+    filter.removeAttribute('disabled', '');
+  });
 };
 
-const checkType = (advertisement, element) => element.value === DEFAULT_VALUE || advertisement.offer.type === element.value;
+const checkType = (advertisement, element) =>
+  element.value === DEFAULT_VALUE || advertisement.offer.type === element.value;
 
 const checkPrice = (advertisement, element) => {
   switch (element.value) {
@@ -51,9 +60,11 @@ const checkPrice = (advertisement, element) => {
   }
 };
 
-const checkRooms = (advertisement, element) => element.value === DEFAULT_VALUE || Number(element.value) === advertisement.offer.rooms;
+const checkRooms = (advertisement, element) =>
+  element.value === DEFAULT_VALUE || Number(element.value) === advertisement.offer.rooms;
 
-const checkGuests = (advertisement, element) => element.value === DEFAULT_VALUE ? true : parseInt(element.value, 10) <= advertisement.offer.guests;
+const checkGuests = (advertisement, element) =>
+  element.value === DEFAULT_VALUE ? true : parseInt(element.value, 10) <= advertisement.offer.guests;
 
 const checkFeatures = (advertisement) => {
   const checkedFeatures = filterForm.querySelectorAll('.map__checkbox:checked');
@@ -68,23 +79,27 @@ const checkFeatures = (advertisement) => {
 };
 
 export const getFilteredAds = (advertisements) => {
-  const filteredAdvertisements = advertisements.filter((advertisement) => (
-    checkType(advertisement, typeSelect) &&
+  const filteredAdvertisements = advertisements.filter(
+    (advertisement) =>
+      checkType(advertisement, typeSelect) &&
       checkPrice(advertisement, priceSelect) &&
       checkRooms(advertisement, roomsSelect) &&
       checkGuests(advertisement, guestsSelect) &&
       checkFeatures(advertisement)
-  ));
+  );
   return filteredAdvertisements;
 };
 
-const onFilterChange = (advertisements) => debounce((evt) => {
-  evt.preventDefault();
-  const filteredAdds = getFilteredAds(advertisements);
-  removeMapMarkers();
-  renderCards(filteredAdds);
-}, RERENDER_DELAY);
+const onFilterChange = (advertisements) =>
+  debounce((evt) => {
+    evt.preventDefault();
+    const filteredAdds = getFilteredAds(advertisements);
+    removeMapMarkers();
+    renderCards(filteredAdds);
+  }, RERENDER_DELAY);
 
 export const setFilterChange = (advertisements) => {
-  filterForm.addEventListener('change', onFilterChange(advertisements));
+  filterForm.addEventListener('change', () => onFilterChange(advertisements));
 };
+
+formReset.addEventListener('click', resetFilters);

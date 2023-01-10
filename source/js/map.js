@@ -15,10 +15,11 @@ const mainPinIcon = L.icon({
   iconAnchor: [MAIN_POINTER_WIDTH / 2, MAIN_POINTER_WIDTH],
 });
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-}).addTo(map);
+const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+});
+tileLayer.setZIndex(100);
+tileLayer.addTo(map);
 
 const mainMarker = L.marker(
   {
@@ -81,8 +82,7 @@ export const setUpMap = (advertisements) => {
   );
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
   renderCards(advertisements);

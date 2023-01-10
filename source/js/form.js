@@ -1,6 +1,14 @@
 import { sendData } from './data.js';
-import { onRoomNumberChange } from './validate.js';
-import { resetFilters } from './filter.js';
+import {
+  titleInput,
+  priceInput,
+  typeSelect,
+  timeinSelect,
+  roomNumberSelect,
+  onRoomNumberChange,
+  onTimeinChange,
+  minPrices,
+} from './validate.js';
 import { showSuccessMessage, showErrorMessage } from './messages.js';
 
 export const DEFAULT_LAT = 35.6804;
@@ -10,7 +18,10 @@ export const LOCATION_PRECISION = 5;
 export const form = document.querySelector('.ad-form');
 export const formReset = form.querySelector('.ad-form__reset');
 const addressField = form.querySelector('#address');
+const descriptionField = form.querySelector('#description');
 const mapFilters = document.querySelector('.map__filters');
+const features = form.querySelector('.features');
+const featuresElements = features.elements;
 
 export const setAddress = (lat, long) => {
   const latitude = lat.toFixed(LOCATION_PRECISION);
@@ -52,11 +63,21 @@ export const activateForm = () => {
 
 export const onResetForm = () => {
   setAddress(DEFAULT_LAT, DEFAULT_LONG);
+  titleInput.value = '';
+  priceInput.value = '';
+  typeSelect.value = 'flat';
+  priceInput.placeholder = minPrices[typeSelect.value];
+  timeinSelect.value = '12:00';
+  roomNumberSelect.value = '1';
+  [...featuresElements].forEach((feature) => {
+    feature.checked = false;
+  });
+  descriptionField.value = '';
   onRoomNumberChange();
-  resetFilters();
+  onTimeinChange();
 };
 
-const onSubmitForm = () => {
+export const onSubmitForm = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
@@ -65,10 +86,8 @@ const onSubmitForm = () => {
         showSuccessMessage();
         onResetForm();
       },
-      showErrorMessage(),
-      formData);
+      showErrorMessage,
+      formData
+    );
   });
 };
-
-formReset.addEventListener('click', onResetForm);
-form.addEventListener('submit', onSubmitForm);
