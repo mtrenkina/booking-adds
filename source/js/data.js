@@ -22,14 +22,11 @@ export const sendData = (onSuccess, onFail, body) => {
   })
     .then((response) => {
       if (response.ok) {
-        onSuccess('Ваше объявление успешно размещено!');
-      } else if (response.status >= 500 && response.status <= 505) {
-        onFail('Не удалось получить данные с сервера. Попробуйте ещё раз!');
-      } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз!');
+        return onSuccess();
       }
+      onFail();
     })
     .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз!');
+      onFail();
     });
 };

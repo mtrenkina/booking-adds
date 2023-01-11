@@ -5,42 +5,19 @@ const ROOM_TYPES = {
   bungalow: 'Бунгало',
 };
 
-const ALERT_MESSAGE = 'Ошибка загрузки данных :(';
+const TOKYO_CENTER = {
+  lat: 35.69034,
+  lng: 139.75175,
+};
+
+const ZOOM = 13;
+
+export const getTokyoCenter = () => TOKYO_CENTER;
+
+export const getDefaultZoom = () => ZOOM;
 
 export const getOfferType = (roomKey) => Object.keys(ROOM_TYPES).find((key) => ROOM_TYPES[key] === roomKey);
 
 export const isEscEvt = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 export const isEnterEvt = (evt) => evt.key === 'Enter';
-
-const closePopup = () => {
-  if (document.querySelector('.success')) {
-    document.querySelector('.success').remove();
-  }
-  if (document.querySelector('.error')) {
-    document.querySelector('.error').remove();
-  }
-  document.removeEventListener('keydown', onPopupEscKeydown);
-  document.removeEventListener('keydown', onPopupClick);
-};
-
-const onPopupClick = () => {
-  closePopup();
-};
-
-const onPopupEscKeydown = (evt) => {
-  if (isEscEvt(evt)) {
-    evt.preventDefault();
-    closePopup();
-  }
-};
-
-export const showAlert = () => {
-  const errorTemplate = document.querySelector('#error').content.querySelector('.error');
-  const errorMessage = errorTemplate.cloneNode(true);
-  errorMessage.style.zIndex = 1000;
-  errorMessage.querySelector('p').textContent = ALERT_MESSAGE;
-  document.querySelector('main').append(errorMessage);
-  document.addEventListener('keydown', onPopupEscKeydown);
-  document.addEventListener('click', closePopup);
-};
