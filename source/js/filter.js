@@ -6,42 +6,12 @@ const DEFAULT_VALUE = 'any';
 const LOW_PRICE = 10000;
 const HIGH_PRICE = 50000;
 
-const form = document.querySelector('.ad-form');
-const formReset = form.querySelector('.ad-form__reset');
 const filterForm = document.querySelector('.map__filters');
-const filterElements = filterForm.elements;
 const typeSelect = filterForm.querySelector('#housing-type');
 const priceSelect = filterForm.querySelector('#housing-price');
 const roomsSelect = filterForm.querySelector('#housing-rooms');
 const guestsSelect = filterForm.querySelector('#housing-guests');
 const featuresList = filterForm.querySelectorAll('.map__checkbox');
-
-export const resetFilters = () => {
-  Array.from(filterElements).forEach((el) => {
-    el.value = DEFAULT_VALUE;
-  });
-  const checkedFeatures = filterForm.querySelectorAll('.map__checkbox:checked');
-  Array.from(checkedFeatures).forEach((feature) => {
-    feature.checked = false;
-  });
-};
-
-export const deactivateFilter = () => {
-  resetFilters();
-  filterForm.classList.add('.map__filters--disabled');
-
-  Array.from(filterElements).forEach((filter) => {
-    filter.setAttribute('disabled', '');
-  });
-};
-
-export const activateFilter = () => {
-  filterForm.classList.remove('.map__filters--disabled');
-
-  Array.from(filterElements).forEach((filter) => {
-    filter.removeAttribute('disabled', '');
-  });
-};
 
 const checkType = (ad, element) => element.value === DEFAULT_VALUE || ad.offer.type === element.value;
 
@@ -95,7 +65,5 @@ const onFilterChange = (advertisements) => {
 };
 
 export const setFilterChange = (advertisements) => {
-  filterForm.addEventListener('change', () => onFilterChange(advertisements));
+  filterForm.addEventListener('change', () => debounce(onFilterChange(advertisements), RERENDER_DELAY));
 };
-
-formReset.addEventListener('click', resetFilters);

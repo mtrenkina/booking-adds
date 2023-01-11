@@ -1,27 +1,26 @@
+import { getTokyoCenter } from './util.js';
 import { sendData } from './data.js';
-import {
-  titleInput,
-  priceInput,
-  typeSelect,
-  timeinSelect,
-  roomNumberSelect,
-  onRoomNumberChange,
-  onTimeinChange,
-  minPrices,
-} from './validate.js';
+import { onRoomNumberChange, onTimeinChange, returnTypePlaceholder } from './validate.js';
 import { showSuccessMessage, showErrorMessage } from './messages.js';
+import { clearOutImages } from './photos.js';
 
-export const DEFAULT_LAT = 35.6804;
-export const DEFAULT_LONG = 139.769;
-export const LOCATION_PRECISION = 5;
+const TOKYO_CENTER = getTokyoCenter();
+const LOCATION_PRECISION = 5;
+const DEFAULT_VALUE = 'any';
 
-export const form = document.querySelector('.ad-form');
-export const formReset = form.querySelector('.ad-form__reset');
+const form = document.querySelector('.ad-form');
 const addressField = form.querySelector('#address');
 const descriptionField = form.querySelector('#description');
-const mapFilters = document.querySelector('.map__filters');
+const titleInput = form.querySelector('#title');
+const priceInput = form.querySelector('#price');
+const typeSelect = form.querySelector('#type');
+const timeInSelect = form.querySelector('#timein');
+const roomNumberSelect = form.querySelector('#room_number');
 const features = form.querySelector('.features');
 const featuresElements = features.elements;
+const filterForm = document.querySelector('.map__filters');
+const filters = filterForm.querySelectorAll('.map__filter');
+const featuresFilters = filterForm.querySelectorAll('.map__features');
 
 export const setAddress = (lat, long) => {
   const latitude = lat.toFixed(LOCATION_PRECISION);
@@ -29,18 +28,30 @@ export const setAddress = (lat, long) => {
   addressField.value = `${latitude} ${longitude}`;
 };
 
+export const resetFilters = () => {
+  filters.forEach((el) => {
+    el.value = DEFAULT_VALUE;
+  });
+
+  filterForm.querySelectorAll('.map__checkbox:checked').forEach((feature) => {
+    feature.checked = false;
+  });
+};
+
 export const deactivateForm = () => {
   form.classList.add('ad-form--disabled');
   form.querySelectorAll('fieldset').forEach((fieldset) => {
-    fieldset.classList.add('disabled');
+    fieldset.setAttribute('disabled', 'disabled');
   });
 
-  mapFilters.classList.add('map__filters--disabled');
-  mapFilters.querySelectorAll('.map__filter').forEach((filter) => {
-    filter.classList.add('disabled');
+  resetFilters();
+
+  filterForm.classList.add('map__filters--disabled');
+  filters.forEach((filter) => {
+    filter.setAttribute('disabled', 'disabled');
   });
-  mapFilters.querySelectorAll('.map__features').forEach((feature) => {
-    feature.classList.add('disabled');
+  featuresFilters.forEach((feature) => {
+    feature.setAttribute('disabled', 'disabled');
   });
 };
 
@@ -48,43 +59,50 @@ export const activateForm = () => {
   form.classList.remove('ad-form--disabled');
 
   form.querySelectorAll('fieldset').forEach((fieldset) => {
-    fieldset.classList.remove('disabled');
+    fieldset.removeAttribute('disabled');
   });
 
-  mapFilters.classList.remove('map__filters--disabled');
-  mapFilters.querySelectorAll('.map__filter').forEach((filter) => {
-    filter.classList.remove('disabled');
+  filterForm.classList.remove('map__filters--disabled');
+  filters.forEach((filter) => {
+    filter.removeAttribute('disabled');
   });
-  mapFilters.querySelectorAll('.map__features').forEach((feature) => {
-    feature.classList.remove('disabled');
+  featuresFilters.forEach((feature) => {
+    feature.removeAttribute('disabled');
   });
+
   onRoomNumberChange();
 };
 
-export const onResetForm = () => {
-  setAddress(DEFAULT_LAT, DEFAULT_LONG);
-  titleInput.value = '';
-  priceInput.value = '';
-  typeSelect.value = 'flat';
-  priceInput.placeholder = minPrices[typeSelect.value];
-  timeinSelect.value = '12:00';
-  roomNumberSelect.value = '1';
-  [...featuresElements].forEach((feature) => {
-    feature.checked = false;
+export const onFormReset = (cb) => {
+  form.addEventListener('reset', (evt) => {
+    evt.preventDefault();
+    clearOutImages();
+    setAddress(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
+    resetFilters();
+    cb();
+    titleInput.value = '';
+    priceInput.value = '';
+    typeSelect.value = 'flat';
+    priceInput.placeholder = returnTypePlaceholder(typeSelect.value);
+    timeInSelect.value = '12:00';
+    roomNumberSelect.value = '1';
+    Array.from(featuresElements).forEach((feature) => {
+      feature.checked = false;
+    });
+    descriptionField.value = '';
+    onRoomNumberChange();
+    onTimeinChange();
   });
-  descriptionField.value = '';
-  onRoomNumberChange();
-  onTimeinChange();
 };
 
-export const onSubmitForm = () => {
+export const onFormSubmit = (cb) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
     sendData(
       () => {
         showSuccessMessage();
-        onResetForm();
+        form.reset(cb);
       },
       showErrorMessage,
       formData

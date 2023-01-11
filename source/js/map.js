@@ -1,10 +1,17 @@
 import L from 'leaflet';
+import { getTokyoCenter, getDefaultZoom } from './util.js';
 import { createCard } from './cards.js';
-import { DEFAULT_LAT, DEFAULT_LONG, activateForm, setAddress } from './form.js';
+import { activateForm, setAddress } from './form.js';
 
-const ZOOM = 13;
+const TOKYO_CENTER = getTokyoCenter();
+const ZOOM = getDefaultZoom();
+
 const POINTER_WIDTH = 40;
 const MAIN_POINTER_WIDTH = 52;
+const MAP_PARAMETERS = {
+  url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+};
 
 const map = L.map('map-canvas');
 const markers = [];
@@ -15,16 +22,16 @@ const mainPinIcon = L.icon({
   iconAnchor: [MAIN_POINTER_WIDTH / 2, MAIN_POINTER_WIDTH],
 });
 
-const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+const tileLayer = L.tileLayer(MAP_PARAMETERS.url, {
+  attribution: MAP_PARAMETERS.attribution,
 });
 tileLayer.setZIndex(100);
 tileLayer.addTo(map);
 
 const mainMarker = L.marker(
   {
-    lat: DEFAULT_LAT,
-    lng: DEFAULT_LONG,
+    lat: TOKYO_CENTER.lat,
+    lng: TOKYO_CENTER.lng,
   },
   {
     draggable: true,
@@ -37,12 +44,12 @@ const addMainMarker = () => {
 };
 
 export const mainMarkerDefaultPosition = () => {
-  mainMarker.setLatLng(L.latLng(DEFAULT_LAT, DEFAULT_LONG));
+  mainMarker.setLatLng(L.latLng(TOKYO_CENTER.lat, TOKYO_CENTER.lng));
 };
 
 const onMapLoad = () => {
   activateForm();
-  setAddress(DEFAULT_LAT, DEFAULT_LONG);
+  setAddress(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
   addMainMarker();
 };
 
@@ -75,14 +82,14 @@ export const renderCards = (advertisements) => {
 export const setUpMap = (advertisements) => {
   map.on('load', onMapLoad).setView(
     {
-      lat: DEFAULT_LAT,
-      lng: DEFAULT_LONG,
+      lat: TOKYO_CENTER.lat,
+      lng: TOKYO_CENTER.lng,
     },
     ZOOM
   );
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  L.tileLayer(MAP_PARAMETERS.url, {
+    attribution: MAP_PARAMETERS.attribution,
   }).addTo(map);
 
   renderCards(advertisements);
