@@ -3,6 +3,7 @@
   "version": "22.0.0",
   "private": true,
   "description": "Личный проект «Кексобукинг»",
+  "homepage": "https:/mtrenkina.github.io/booking_adds/",
   "repository": {
     "type": "git",
     "url": "{{sshUrl}}"
@@ -25,7 +26,8 @@
     "build": "webpack --mode production",
     "editorconfig": "editorconfig-cli",
     "start": "browser-sync start --server \"build/\" --no-ui --files \"source/**/*.js\"",
-    "test": "eslint js/"
+    "test": "eslint js/",
+    "deploy": "gh-pages -d build"
   },
   "editorconfig-cli": [
     "*.json",
