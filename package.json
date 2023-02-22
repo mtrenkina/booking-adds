@@ -3,6 +3,7 @@
   "version": "22.0.0",
   "private": true,
   "description": "Личный проект «Кексобукинг»",
+  "homepage": "https:/mtrenkina.github.io/booking_adds/",
   "repository": {
     "type": "git",
     "url": "{{sshUrl}}"
