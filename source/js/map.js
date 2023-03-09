@@ -17,7 +17,7 @@ const map = L.map('map-canvas');
 const markers = [];
 
 const mainPinIcon = L.icon({
-  iconUrl: URL('https://mtrenkina.github.io/booking-adds/img/main-pin.svg'),
+  iconUrl: 'https://mtrenkina.github.io/booking-adds/img/main-pin.svg',
   iconSize: [MAIN_POINTER_WIDTH, MAIN_POINTER_WIDTH],
   iconAnchor: [MAIN_POINTER_WIDTH / 2, MAIN_POINTER_WIDTH],
 });
@@ -56,7 +56,7 @@ const onMapLoad = () => {
 export const renderCards = (advertisements) => {
   advertisements.forEach(({ author, location, offer }) => {
     const icon = L.icon({
-      iconUrl: URL('https://mtrenkina.github.io/booking-adds/img/pin.svg'),
+      iconUrl: 'https://mtrenkina.github.io/booking-adds/img/pin.svg',
       iconSize: [POINTER_WIDTH, POINTER_WIDTH],
       iconAnchor: [POINTER_WIDTH / 2, POINTER_WIDTH],
     });
